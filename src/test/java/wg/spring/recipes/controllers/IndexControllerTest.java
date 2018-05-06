@@ -6,6 +6,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import wg.spring.recipes.domain.Recipe;
 import wg.spring.recipes.services.RecipeService;
@@ -16,6 +19,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class IndexControllerTest {
 
@@ -57,5 +62,14 @@ public class IndexControllerTest {
                 .addAttribute(ArgumentMatchers.eq("recipes"), argumentCaptor.capture());
         Set<Recipe> setInController = argumentCaptor.getValue();
         assertEquals(2, setInController.size());
+    }
+
+    @Test
+    public void testMockMVC() throws Exception{
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"));
     }
 }
