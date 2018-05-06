@@ -6,6 +6,7 @@ import wg.spring.recipes.domain.Recipe;
 import wg.spring.recipes.repositories.RecipeRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -29,6 +30,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe findById(Long id) {
-        return null;
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+
+        if(!recipeOptional.isPresent()){
+            throw new RuntimeException("Recipe Not Found!");
+        }
+
+        return recipeOptional.get();
     }
 }
